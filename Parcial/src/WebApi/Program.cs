@@ -89,6 +89,3 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 app.Run();
-
-
-
