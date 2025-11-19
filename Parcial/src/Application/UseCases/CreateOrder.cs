@@ -1,24 +1,55 @@
-using System.Threading;
 using System;
-namespace Application.UseCases;
-
 using Domain.Entities;
 using Domain.Services;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 
-public class CreateOrderUseCase
+namespace Application.UseCases
 {
-    public Order Execute(string customer, string product, int qty, decimal price)
+    public class CreateOrderUseCase
     {
-        Logger.Log("CreateOrderUseCase starting");
-        var order = OrderService.CreateTerribleOrder(customer, product, qty, price);
+        private readonly IOrderService _orderService;
+        private readonly IDatabase _database;
+        private readonly ILogger _logger;
 
-        var sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (" + order.Id + ", '" + customer + "', '" + product + "', " + qty + ", " + price + ")";
-        Logger.Try(() => BadDb.ExecuteNonQueryUnsafe(sql)); // swallow failures silently
+        // Inyección de dependencias para mejorar testabilidad y desacoplamiento
+        public CreateOrderUseCase(IOrderService orderService, IDatabase database, ILogger logger)
+        {
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
+            _database = database ?? throw new ArgumentNullException(nameof(database));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-        System.Threading.Thread.Sleep(1500);
+        public Order Execute(string customer, string product, int qty, decimal price)
+        {
+            _logger.Log("CreateOrderUseCase starting");
 
-        return order;
+            // Suponiendo que CreateOrder es una creación segura y correcta
+            var order = _orderService.CreateOrder(customer, product, qty, price);
+
+            // Usar parámetros para evitar SQL Injection
+            string sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (@Id, @Customer, @Product, @Qty, @Price)";
+
+            try
+            {
+                _database.ExecuteNonQuery(sql, new
+                {
+                    Id = order.Id,
+                    Customer = customer,
+                    Product = product,
+                    Qty = qty,
+                    Price = price
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al guardar la orden en la base de datos: " + ex.Message);
+                throw; // No ocultar errores, re-lanzar para gestión superior
+            }
+
+            // Retirar Sleep; en caso de necesitar esperas, usar asincronía y await Task.Delay()
+
+            return order;
+        }
     }
 }
