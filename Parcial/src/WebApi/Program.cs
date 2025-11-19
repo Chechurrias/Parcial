@@ -13,15 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
+var allowedOrigins = new[] { "https://midominio.com", "https://app.otraempresa.com" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("TrustedOrigins", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
+
+var app = builder.Build();
+
+app.UseCors("TrustedOrigins");
 
 var password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
     ?? throw new InvalidOperationException("DB_PASSWORD environment variable not set");
@@ -95,4 +101,5 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 await app.RunAsync();
+
 
