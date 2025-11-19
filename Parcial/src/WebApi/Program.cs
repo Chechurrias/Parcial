@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-//BadDb.ConnectionString = builder.Configuration.GetConnectionString("Sql")
+BadDb.ConnectionString = builder.Configuration.GetConnectionString("Sql")
     ?? "Server=localhost;Database=master;User Id=sa;Password=SuperSecret123!;TrustServerCertificate=True";
 
 var app = builder.Build();
@@ -89,5 +89,6 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 app.Run();
+
 
 
