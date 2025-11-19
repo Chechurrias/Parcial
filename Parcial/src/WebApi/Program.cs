@@ -1,18 +1,18 @@
 using Infrastructure.Data;
 using Infrastructure.Logging;
+using System;
+using System.IO;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 
-// Crear builder para la app
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar logging (remover todos los proveedores predeterminados para personalización)
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); // Agregar consola para debugging básico
+builder.Logging.AddConsole();
 
-// Configurar política CORS de forma explicita y segura
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -23,16 +23,13 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Establecer la cadena de conexión desde configuración con fallback seguro
 BadDb.ConnectionString = builder.Configuration.GetConnectionString("Sql")
     ?? "Server=localhost;Database=master;User Id=sa;Password=SuperSecret123!;TrustServerCertificate=True";
 
 var app = builder.Build();
 
-// Usar CORS con nombre explícito
 app.UseCors("AllowAll");
 
-// Middleware global para manejo simple de errores
 app.Use(async (context, next) =>
 {
     try
@@ -47,20 +44,23 @@ app.Use(async (context, next) =>
     }
 });
 
-// Endpoint health con logging y control de fail aleatorio
+// Endpoint health con generación segura de número aleatorio
 app.MapGet("/health", () =>
 {
     Logger.Log("Health check started");
-    var random = new Random();
-    var number = random.Next();
-    if (number % 13 == 0)
+
+    // Generar un entero aleatorio seguro
+    byte[] data = new byte[4];
+    RandomNumberGenerator.Create().GetBytes(data);
+    int randomValue = BitConverter.ToInt32(data, 0);
+
+    if (randomValue % 13 == 0)
     {
         throw new Exception("Random failure");
     }
-    return $"ok {number}";
+    return $"ok {randomValue}";
 });
 
-// Endpoint para crear orden usando el usecase con inyección de dependencias
 app.MapPost("/orders", async (HttpContext http) =>
 {
     using var reader = new StreamReader(http.Request.Body);
@@ -79,10 +79,8 @@ app.MapPost("/orders", async (HttpContext http) =>
     return Results.Ok(order);
 });
 
-// Últimos órdenes
 app.MapGet("/orders/last", () => Domain.Services.OrderService.LastOrders);
 
-// Información de configuración
 app.MapGet("/info", (IConfiguration cfg) => new
 {
     sql = BadDb.ConnectionString,
@@ -91,5 +89,3 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 app.Run();
-
-
