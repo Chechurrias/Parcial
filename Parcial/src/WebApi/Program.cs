@@ -88,4 +88,4 @@ app.MapGet("/info", (IConfiguration cfg) => new
     version = "v0.0.1-secure"
 });
 
-app.Run();
+await app.RunAsync();
