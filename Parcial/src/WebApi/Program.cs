@@ -23,8 +23,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-BadDb.ConnectionString = builder.Configuration.GetConnectionString("Sql")
-    ?? "Server=localhost;Database=master;User Id=sa;Password=SuperSecret123!;TrustServerCertificate=True";
+var password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
+    ?? throw new InvalidOperationException("DB_PASSWORD environment variable not set");
+
+BadDb.ConnectionString = string.Format(
+    "Server=database-server;User Id=user;Password={0};Database=ProductionData;TrustServerCertificate=True",
+    password
+);
+
 
 var app = builder.Build();
 
@@ -89,3 +95,4 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 await app.RunAsync();
+
