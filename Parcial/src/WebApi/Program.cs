@@ -1,4 +1,4 @@
-using Infrastructure.Data;
+//using Infrastructure.Data;
 using Infrastructure.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -91,3 +91,4 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 app.Run();
+
