@@ -23,61 +23,34 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarCloud Begin
-      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
+      run: dotnet sonarscanner begin /k=Chechurrias_Parcial /o=chechurrias /d:sonar.token=${{ secrets.SONAR_TOKEN }} /d:sonar.cs.opencover.reportsPaths=coverage.opencover.xml
       working-directory: ./Parcial
-
-    - name: Reescribir archivo coverage.cobertura.xml en UTF-8 sin BOM
       shell: pwsh
-      run: |
-        $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-        [System.IO.File]::WriteAllLines("./coverage.cobertura.xml", (Get-Content ./coverage.cobertura.xml), $utf8NoBom)
-      working-directory: ./Parcial
-
 
     - name: Build Solution
       run: dotnet build BadCleanArch.sln --configuration Release
       working-directory: ./Parcial
 
-    - name: Run Tests and Collect Coverage
-      run: dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults --logger:trx
+    - name: Run Tests and Collect OpenCover Coverage
+      run: |
+        dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover --logger:trx
       working-directory: ./Parcial
 
-    - name: Copiar coverage.cobertura.xml al root
+    - name: Copiar archivo OpenCover.xml al root
       shell: pwsh
       run: |
-        $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
-        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml -Force }
+        $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter "coverage.opencover.xml" | Select-Object -First 1
+        if ($file) { Copy-Item $file.FullName ./coverage.opencover.xml -Force }
       working-directory: ./Parcial
 
-    - name: Insertar DOCTYPE en coverage.cobertura.xml
+    - name: Validar y mostrar OpenCover generado (opcional)
       shell: pwsh
       run: |
-        $lines = Get-Content ./coverage.cobertura.xml
-        $doctype = '<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">'
-        $lines = $lines[0..0] + $doctype + $lines[1..($lines.Length-1)]
-        Set-Content ./coverage.cobertura.xml -Value $lines
-      working-directory: ./Parcial
-
-    - name: Validar y mostrar cobertura generada (opcional)
-      shell: pwsh
-      run: |
-        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
-        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
-      working-directory: ./Parcial
-      
-    - name: Reemplazar backslashes por slashes
-      shell: pwsh
-      run: |
-        (Get-Content ./coverage.cobertura.xml) -replace '\\', '/' | Set-Content ./coverage.cobertura.xml
-      working-directory: ./Parcial
-
-    - name: Normalizar branch="False" a branch="false"
-      shell: pwsh
-      run: |
-        (Get-Content ./coverage.cobertura.xml) -replace 'branch="False"', 'branch="false"' | Set-Content ./coverage.cobertura.xml
+        Get-Content ./coverage.opencover.xml | Select-Object -First 20
+        Write-Host "Tamaño archivo:" (Get-Item ./coverage.opencover.xml).Length
       working-directory: ./Parcial
 
     - name: SonarCloud End
-      shell: pwsh
       run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
       working-directory: ./Parcial
+      shell: pwsh
