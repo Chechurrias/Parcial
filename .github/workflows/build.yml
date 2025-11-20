@@ -23,7 +23,8 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarCloud Begin
-      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
+      run: dotnet sonarscanner begin /k=Chechurrias_Parcial /o=chechurrias /d:sonar.token=${{ secrets.SONAR_TOKEN }} /d:sonar.coverageReportPaths=coverage.cobertura.xml
+      shell: pwsh
       working-directory: ./Parcial
 
     - name: Build Solution
@@ -38,19 +39,16 @@ jobs:
       shell: pwsh
       run: |
         $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
-        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
+        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml -Force }
       working-directory: ./Parcial
 
-    - name: Instalar ReportGenerator
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
-
-    - name: Convertir reporte de cobertura a estándar Cobertura
-      run: reportgenerator -reports:coverage.cobertura.xml -targetdir:converted -reporttypes:Cobertura
-      working-directory: ./Parcial
-
-    - name: Usar archivo convertido para SonarCloud
+    - name: Insertar DOCTYPE en coverage.cobertura.xml
       shell: pwsh
-      run: Copy-Item ./converted/Cobertura.xml ./coverage.cobertura.xml -Force
+      run: |
+        $lines = Get-Content ./coverage.cobertura.xml
+        $doctype = '<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">'
+        $lines = $lines[0..0] + $doctype + $lines[1..($lines.Length-1)]
+        Set-Content ./coverage.cobertura.xml -Value $lines
       working-directory: ./Parcial
 
     - name: Validar y mostrar cobertura generada (opcional)
@@ -62,5 +60,5 @@ jobs:
 
     - name: SonarCloud End
       shell: pwsh
-      run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
       working-directory: ./Parcial
