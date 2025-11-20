@@ -10,65 +10,65 @@ using WebApi;
 using Application.Interfaces;
 using Application.Tests;
 
-public class CustomWebAppFactory : WebApplicationFactory<Program>
+namespace Application.Tests // <--- AGREGA ESTE BLOQUE
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    public class CustomWebAppFactory : WebApplicationFactory<Program>
     {
-        builder.ConfigureServices(services =>
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // Quitar el registro real de IDatabase
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(IDatabase));
-            if (descriptor != null)
-                services.Remove(descriptor);
-
-            // Agregar dummy para integración
-            services.AddScoped<IDatabase, DummyDatabase>();
-        });
-    }
-}
-
-public class ProgramTests : IClassFixture<CustomWebAppFactory>
-{
-    private readonly HttpClient _client;
-    public ProgramTests(CustomWebAppFactory factory)
-    {
-        _client = factory.CreateClient();
+            builder.ConfigureServices(services =>
+            {
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(IDatabase));
+                if (descriptor != null)
+                    services.Remove(descriptor);
+                services.AddScoped<IDatabase, DummyDatabase>();
+            });
+        }
     }
 
-    [Fact]
-    public async Task Health_Endpoint_ReturnsOk()
+    public class ProgramTests : IClassFixture<CustomWebAppFactory>
     {
-        var response = await _client.GetAsync("/health");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        Assert.Contains("ok", content);
-    }
+        private readonly HttpClient _client;
+        public ProgramTests(CustomWebAppFactory factory)
+        {
+            _client = factory.CreateClient();
+        }
 
-    [Fact]
-    public async Task Orders_Endpoint_ReturnsCreatedOrder()
-    {
-        var content = new StringContent("Demo,TestItem,2,10", System.Text.Encoding.UTF8, "text/plain");
-        var response = await _client.PostAsync("/orders", content);
-        response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Demo", result);
-        Assert.Contains("TestItem", result);
-    }
+        [Fact]
+        public async Task Health_Endpoint_ReturnsOk()
+        {
+            var response = await _client.GetAsync("/health");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("ok", content);
+        }
 
-    [Fact]
-    public async Task Info_Endpoint_ReturnsVersionAndConnectionInfo()
-    {
-        var response = await _client.GetAsync("/info");
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadAsStringAsync();
+        [Fact]
+        public async Task Orders_Endpoint_ReturnsCreatedOrder()
+        {
+            var content = new StringContent("Demo,TestItem,2,10", System.Text.Encoding.UTF8, "text/plain");
+            var response = await _client.PostAsync("/orders", content);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Demo", result);
+            Assert.Contains("TestItem", result);
+        }
 
-        Assert.Contains("v0.0.1-secure", json);
-        Assert.True(
-        json.Contains("Server=localhost") || 
-        json.Contains("\"sql\":null") || 
-        json.Contains("Dummy"),
-        $"La respuesta del endpoint info debe reflejar el ConnectionString o un dummy/null. Recibido: {json}"
-    );
+        [Fact]
+        public async Task Info_Endpoint_ReturnsVersionAndConnectionInfo()
+        {
+            var response = await _client.GetAsync("/info");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("v0.0.1-secure", json);
+            Assert.True(
+                json.Contains("Server=localhost") || 
+                json.Contains("\"sql\":null") || 
+                json.Contains("Dummy"),
+                $"La respuesta del endpoint info debe reflejar el ConnectionString o un dummy/null. Recibido: {json}"
+            );
+        }
     }
 }
