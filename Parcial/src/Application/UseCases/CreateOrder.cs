@@ -25,14 +25,13 @@ namespace Application.UseCases
             var order = _orderService.CreateOrder(customer, product, qty, price);
 
             string sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (@Id, @Customer, @Product, @Qty, @Price)";
-
             var parameters = new[]
             {
-                new System.Data.SqlClient.SqlParameter("@Id", order.Id),
-                new System.Data.SqlClient.SqlParameter("@Customer", customer),
-                new System.Data.SqlClient.SqlParameter("@Product", product),
-                new System.Data.SqlClient.SqlParameter("@Qty", qty),
-                new System.Data.SqlClient.SqlParameter("@Price", price)
+                new SqlParameter("@Id", order.Id),
+                new SqlParameter("@Customer", customer),
+                new SqlParameter("@Product", product),
+                new SqlParameter("@Qty", qty),
+                new SqlParameter("@Price", price)
             };
 
             try
