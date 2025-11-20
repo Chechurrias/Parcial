@@ -26,6 +26,14 @@ jobs:
       run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
       working-directory: ./Parcial
 
+    - name: Reescribir archivo coverage.cobertura.xml en UTF-8 sin BOM
+      shell: pwsh
+      run: |
+        $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+        [System.IO.File]::WriteAllLines("./coverage.cobertura.xml", (Get-Content ./coverage.cobertura.xml), $utf8NoBom)
+      working-directory: ./Parcial
+
+
     - name: Build Solution
       run: dotnet build BadCleanArch.sln --configuration Release
       working-directory: ./Parcial
