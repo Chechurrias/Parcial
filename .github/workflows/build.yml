@@ -34,6 +34,29 @@ jobs:
       run: dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults --logger:trx
       working-directory: ./Parcial
 
+          - name: Ejecutar Tests con Cobertura
+      run: |
+        dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults --logger:trx
+      working-directory: ./Parcial
+
+    - name: Copiar coverage.cobertura.xml al root
+      shell: pwsh
+      run: |
+        $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
+        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
+      working-directory: ./Parcial
+
+    - name: Validar y mostrar cobertura generada
+      shell: pwsh
+      run: |
+        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
+        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
+      working-directory: ./Parcial
+
+    - name: SonarCloud End
+      run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      working-directory: ./Parcial
+
     - name: Copiar coverage.cobertura.xml al root
       shell: pwsh
       run: |
