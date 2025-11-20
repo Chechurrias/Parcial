@@ -44,8 +44,8 @@ namespace Application.UseCases
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al guardar la orden en la base de datos");
-                throw;  // Re-lanzar para gestión superior
-            }
+                throw new Exception("Error específico al guardar la orden", ex);
+            }                       
 
             // Retirar Sleep; en caso de necesitar esperas, usar asincronía y await Task.Delay()
 
