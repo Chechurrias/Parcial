@@ -23,8 +23,7 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarCloud Begin
-      run: dotnet sonarscanner begin /k=Chechurrias_Parcial /o=chechurrias /d:sonar.token=${{ secrets.SONAR_TOKEN }} /d:sonar.coverageReportPaths=coverage.cobertura.xml
-      shell: pwsh
+      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
       working-directory: ./Parcial
 
     - name: Build Solution
