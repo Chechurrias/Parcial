@@ -34,9 +34,6 @@ public static class OrderService
 
         LastOrdersBag.Add(o);
 
-        // Elimina la siguiente línea:
-        // Infrastructure.Logging.Logger.Log($"Created order {o.Id} for {customer}");
-
         return o;
     }
 }
