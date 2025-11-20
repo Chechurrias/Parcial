@@ -8,10 +8,11 @@ namespace Domain.Entities
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
-        public void CalculateTotalAndLog()
+        public void CalculateTotal()
         {
             var total = Quantity * UnitPrice;
-            Infrastructure.Logging.Logger.Log($"Total: {total}");
+            // Eliminado: Infrastructure.Logging.Logger.Log(...)
+            // Si necesitas avisar/loggear, hazlo desde capas superiores (Application, Infrastructure, WebApi)
         }
     }
 }
