@@ -8,8 +8,7 @@ namespace Domain.Entities
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
-        // Si este método no tiene lógica útil, elimínalo
-        // public void CalculateTotal() { }
+
 
         // O si lo necesitas para alguna interfaz, simplemente déjalo vacío (solo si realmente hace falta):
         // public void CalculateTotal() { /* sin lógica, advertencia desactivada */ }
