@@ -10,17 +10,26 @@ public class LoggerTests
         // Arrange
         var logger = new Logger();
         var testMessage = "Mensaje de prueba";
+        var originalOut = Console.Out;
         using var sw = new System.IO.StringWriter();
-        Console.SetOut(sw);
 
-        // Act
-        logger.Log(testMessage);
+        try
+        {
+            Console.SetOut(sw);
 
-        // Assert
-        var output = sw.ToString();
-        Assert.Contains("LOG", output);
-        Assert.Contains(testMessage, output);
-        Assert.Contains(DateTime.Now.Year.ToString(), output); // Año actual
+            // Act
+            logger.Log(testMessage);
+
+            // Assert
+            var output = sw.ToString();
+            Assert.Contains("LOG", output);
+            Assert.Contains(testMessage, output);
+            Assert.Contains(DateTime.Now.Year.ToString(), output); // Año actual
+        }
+        finally
+        {
+            Console.SetOut(originalOut); // SIEMPRE restáuralo
+        }
     }
 
     [Fact]
@@ -30,17 +39,26 @@ public class LoggerTests
         var logger = new Logger();
         var testMessage = "Problema crítico";
         var exception = new InvalidOperationException("Error simulado");
+        var originalOut = Console.Out;
         using var sw = new System.IO.StringWriter();
-        Console.SetOut(sw);
 
-        // Act
-        logger.LogError(exception, testMessage);
+        try
+        {
+            Console.SetOut(sw);
 
-        // Assert
-        var output = sw.ToString();
-        Assert.Contains("ERROR", output);
-        Assert.Contains(testMessage, output);
-        Assert.Contains(exception.GetType().Name, output);
-        Assert.Contains(DateTime.Now.Year.ToString(), output);
+            // Act
+            logger.LogError(exception, testMessage);
+
+            // Assert
+            var output = sw.ToString();
+            Assert.Contains("ERROR", output);
+            Assert.Contains(testMessage, output);
+            Assert.Contains(exception.GetType().Name, output);
+            Assert.Contains(DateTime.Now.Year.ToString(), output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut); // SIEMPRE restáuralo
+        }
     }
 }
