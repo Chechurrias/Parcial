@@ -1,11 +1,12 @@
-// En Startup.cs o donde configures DI:
-using Application.Interfaces;
-using Infrastructure.Logging;
-using Infrastructure.Data; // Supón que tu implementación de IDatabase está aquí
-
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddScoped<ILogger, Logger>();
-    services.AddScoped<IDatabase, Database>();
-    // Lo mismo para IOrderService si lo implementas en Application o Infrastructure según reglas de tu negocio
-}
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
