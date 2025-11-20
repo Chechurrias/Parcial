@@ -23,7 +23,11 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarCloud Begin
-      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$(pwd)/coverage.cobertura.xml"
+      run: |
+        $COVERAGE="$(pwd)/coverage.cobertura.xml"
+        echo "Ruta cobertura para SonarCloud: $COVERAGE"
+        dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$COVERAGE"
+      shell: bash
       working-directory: ./Parcial
 
     - name: Build Solution
@@ -53,15 +57,7 @@ jobs:
       run: Copy-Item ./converted/Cobertura.xml ./coverage.cobertura.xml -Force
       working-directory: ./Parcial
 
-    - name: Validar y mostrar cobertura generada (opcional)
+    - name: Verificación de archivo cobertura
       shell: pwsh
       run: |
-        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
-        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
-      working-directory: ./Parcial
-
-    - name: SonarCloud End
-      run: |
-        dir ./coverage.cobertura.xml
-        dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      working-directory: ./Parcial
+        Write-Host 'Verificando
