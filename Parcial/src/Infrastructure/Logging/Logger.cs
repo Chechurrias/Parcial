@@ -2,16 +2,14 @@ using System;
 
 namespace Infrastructure.Logging
 {
+using System;
+
+namespace Infrastructure.Logging
+{
     public static class Logger
     {
-        private static bool _enabled = true;
-
-        // Propiedad pública para controlar lectura y escritura de Enabled
-        public static bool Enabled
-        {
-            get => _enabled;
-            set => _enabled = value;
-        }
+        // Auto-implemented property con valor por defecto true
+        public static bool Enabled { get; set; } = true;
 
         public static void Log(string message)
         {
