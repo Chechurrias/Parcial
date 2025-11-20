@@ -1,8 +1,6 @@
 using System;
 using Domain.Entities;
-using Domain.Services;
-using Infrastructure.Data;
-using Infrastructure.Logging;
+using Application.Interfaces; // <- aquí defines tus interfaces
 
 namespace Application.UseCases
 {
@@ -12,7 +10,6 @@ namespace Application.UseCases
         private readonly IDatabase _database;
         private readonly ILogger _logger;
 
-        // Inyección de dependencias para mejorar testabilidad y desacoplamiento
         public CreateOrderUseCase(IOrderService orderService, IDatabase database, ILogger logger)
         {
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
@@ -23,11 +20,8 @@ namespace Application.UseCases
         public Order Execute(string customer, string product, int qty, decimal price)
         {
             _logger.Log("CreateOrderUseCase starting");
-
-            // Suponiendo que CreateOrder es una creación segura y correcta
             var order = _orderService.CreateOrder(customer, product, qty, price);
 
-            // Usar parámetros para evitar SQL Injection
             string sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (@Id, @Customer, @Product, @Qty, @Price)";
 
             try
@@ -45,11 +39,9 @@ namespace Application.UseCases
             {
                 _logger.LogError(ex, "Error al guardar la orden en la base de datos");
                 throw new InvalidOperationException("Error específico al guardar la orden", ex);
-            }                       
-
-            // Retirar Sleep; en caso de necesitar esperas, usar asincronía y await Task.Delay()
-
+            }
             return order;
         }
     }
 }
+
