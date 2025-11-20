@@ -25,11 +25,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var app = builder.Build();
-
-app.UseCors("TrustedOrigins");
-
-var password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
+var password = Environment.GetEnvironmentVariable("DB_PASSWORD")
     ?? throw new InvalidOperationException("DB_PASSWORD environment variable not set");
 
 BadDb.ConnectionString = string.Format(
@@ -37,10 +33,9 @@ BadDb.ConnectionString = string.Format(
     password
 );
 
-
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors("TrustedOrigins");
 
 app.Use(async (context, next) =>
 {
@@ -56,19 +51,17 @@ app.Use(async (context, next) =>
     }
 });
 
-// Endpoint health con generación segura de número aleatorio
 app.MapGet("/health", () =>
 {
     Logger.Log("Health check started");
 
-    // Generar un entero aleatorio seguro
     byte[] data = new byte[4];
     RandomNumberGenerator.Create().GetBytes(data);
     int randomValue = BitConverter.ToInt32(data, 0);
 
     if (randomValue % 13 == 0)
     {
-        throw new Exception("Random failure");
+        throw new InvalidOperationException("Random failure occurred.");
     }
     return $"ok {randomValue}";
 });
@@ -101,5 +94,3 @@ app.MapGet("/info", (IConfiguration cfg) => new
 });
 
 await app.RunAsync();
-
-
