@@ -41,11 +41,13 @@ jobs:
         if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
       working-directory: ./Parcial
 
-    - name: Validar y mostrar cobertura generada
+    - name: Agregar línea DOCTYPE a coverage.cobertura.xml
       shell: pwsh
       run: |
-        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
-        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
+        $lines = Get-Content ./coverage.cobertura.xml
+        $doctype = '<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">'
+        $lines = $lines[0..0] + $doctype + $lines[1..($lines.Length-1)]
+        Set-Content ./coverage.cobertura.xml -Value $lines
       working-directory: ./Parcial
 
     - name: SonarCloud End
