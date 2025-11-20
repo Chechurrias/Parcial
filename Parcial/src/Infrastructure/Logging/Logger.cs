@@ -23,11 +23,12 @@ namespace Infrastructure.Logging
             {
                 a();
             }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
                 // Se ignora explícitamente la excepción porque es no crítica
                 // y no se quiere interrumpir la ejecución. Se registra el error para seguimiento.
                 Log("Ignored exception in Try: " + ex.Message);
+                }
             }
         }
     }
