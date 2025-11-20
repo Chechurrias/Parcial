@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using Moq;
 using Application.UseCases;
 using Application.Interfaces;
@@ -9,7 +9,7 @@ public class CreateOrderTests
     [Fact]
     public void Execute_CreatesAndPersistsOrder()
     {
-        // Arrange (configuración de mocks)
+        // Arrange
         var order = new Order
         {
             CustomerName = "Demo",
@@ -26,10 +26,10 @@ public class CreateOrderTests
 
         var useCase = new CreateOrder(serviceMock.Object, dbMock.Object, loggerMock.Object);
 
-        // Act (ejecución real)
+        // Act
         var result = useCase.Execute("Demo", "TestItem", 2, 10m);
 
-        // Assert (verificaciones)
+        // Assert
         Assert.Equal(order, result);
         dbMock.Verify(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<object>()), Times.Once());
         loggerMock.Verify(x => x.Log(It.IsAny<string>()), Times.Once());
