@@ -2,6 +2,6 @@ namespace Application.Interfaces
 {
     public interface IDatabase
     {
-        void ExecuteNonQuery(string sql, object parameters);
+        int ExecuteNonQuery(string sql, object parameters);
     }
 }
