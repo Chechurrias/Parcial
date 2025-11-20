@@ -22,11 +22,10 @@ jobs:
     - name: Install SonarScanner
       run: dotnet tool install --global dotnet-sonarscanner
 
-    - name: SonarCloud Begin
+    - name: SonarCloud Begin (ruta absoluta)
       run: |
-        $COVERAGE="$(pwd)/coverage.cobertura.xml"
-        echo "Ruta cobertura para SonarCloud: $COVERAGE"
-        dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$COVERAGE"
+        echo "Usando ruta absoluta: $(pwd)/coverage.cobertura.xml"
+        dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$(pwd)/coverage.cobertura.xml"
       shell: bash
       working-directory: ./Parcial
 
@@ -48,7 +47,7 @@ jobs:
     - name: Instalar ReportGenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-    - name: Convertir reporte de cobertura a estándar Cobertura
+    - name: Convertir reporte de cobertura a Cobertura estándar
       run: reportgenerator -reports:coverage.cobertura.xml -targetdir:converted -reporttypes:Cobertura
       working-directory: ./Parcial
 
@@ -57,7 +56,16 @@ jobs:
       run: Copy-Item ./converted/Cobertura.xml ./coverage.cobertura.xml -Force
       working-directory: ./Parcial
 
-    - name: Verificación de archivo cobertura
+    - name: Verificar y mostrar cobertura
       shell: pwsh
       run: |
-        Write-Host 'Verificando
+        Write-Host 'Carpeta actual:' (Get-Location)
+        Get-ChildItem ./coverage.cobertura.xml
+        Write-Host 'Primeras líneas:'
+        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
+        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
+      working-directory: ./Parcial
+
+    - name: SonarCloud End
+      run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      working-directory: ./Parcial
