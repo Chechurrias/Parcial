@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi;
 using Application.Interfaces;
-using Application.Test;
+using Application.Tests;
 
 public class CustomWebAppFactory : WebApplicationFactory<Program>
 {
