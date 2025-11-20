@@ -8,10 +8,7 @@ using Domain.Entities;
 
 public static class OrderService
 {
-    // Colección segura para acceso concurrente
     private static readonly ConcurrentBag<Order> LastOrdersBag = new ConcurrentBag<Order>();
-
-    // Exponer solo lectura para evitar modificaciones externas directas
     public static IReadOnlyCollection<Order> LastOrders => LastOrdersBag;
 
     public static Order CreateOrder(string customer, string product, int qty, decimal price)
@@ -27,7 +24,8 @@ public static class OrderService
 
         var o = new Order
         {
-            Id = Guid.NewGuid().ToString(), // ID seguro y único
+            // Ajusta según tipo definido en Order.cs:
+            // Id = nuevoIdEntero,
             CustomerName = customer,
             ProductName = product,
             Quantity = qty,
@@ -36,7 +34,8 @@ public static class OrderService
 
         LastOrdersBag.Add(o);
 
-        Infrastructure.Logging.Logger.Log($"Created order {o.Id} for {customer}");
+        // Elimina la siguiente línea:
+        // Infrastructure.Logging.Logger.Log($"Created order {o.Id} for {customer}");
 
         return o;
     }
