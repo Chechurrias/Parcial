@@ -1,4 +1,6 @@
-namespace Application.Tests
+using Application.Interfaces;
+
+namespace Application.Tests // Usa el mismo namespace en ProgramTests.cs
 {
     public class DummyDatabase : IDatabase
     {
