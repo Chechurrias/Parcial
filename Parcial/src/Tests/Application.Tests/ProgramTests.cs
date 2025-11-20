@@ -1,15 +1,37 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using WebApi;
+using Application.Interfaces;
 
-public class ProgramTests : IClassFixture<WebApplicationFactory<Program>>
+public class CustomWebAppFactory : WebApplicationFactory<Program>
+{
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureServices(services =>
+        {
+            // Quitar el registro real de IDatabase
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IDatabase));
+            if (descriptor != null)
+                services.Remove(descriptor);
+
+            // Agregar dummy para integración
+            services.AddScoped<IDatabase, DummyDatabase>();
+        });
+    }
+}
+
+public class ProgramTests : IClassFixture<CustomWebAppFactory>
 {
     private readonly HttpClient _client;
 
-    public ProgramTests(WebApplicationFactory<Program> factory)
+    public ProgramTests(CustomWebAppFactory factory)
     {
         _client = factory.CreateClient();
     }
@@ -26,13 +48,8 @@ public class ProgramTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task Orders_Endpoint_ReturnsCreatedOrder()
     {
-        // Arrange: Crea payload tipo "Demo,TestItem,2,10.0"
         var content = new StringContent("Demo,TestItem,2,10", System.Text.Encoding.UTF8, "text/plain");
-
-        // Act
         var response = await _client.PostAsync("/orders", content);
-
-        // Assert
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadAsStringAsync();
         Assert.Contains("Demo", result);
@@ -46,6 +63,6 @@ public class ProgramTests : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync();
         Assert.Contains("v0.0.1-secure", json);
-        Assert.Contains("Server=localhost", json); // O ajusta el string según tu config
+        Assert.Contains("Server=localhost", json); // O "Dummy", dependiendo del dummy/real
     }
 }
