@@ -1,16 +1,16 @@
 using System;
 using Domain.Entities;
-using Application.Interfaces; // SOLO este using de interfaces
+using Application.Interfaces; // Este using es clave
 
 namespace Application.UseCases
 {
-    public class CreateOrderUseCase
+    public class CreateOrder
     {
         private readonly IOrderService _orderService;
         private readonly IDatabase _database;
         private readonly ILogger _logger;
 
-        public CreateOrderUseCase(IOrderService orderService, IDatabase database, ILogger logger)
+        public CreateOrder(IOrderService orderService, IDatabase database, ILogger logger)
         {
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             _database = database ?? throw new ArgumentNullException(nameof(database));
@@ -19,7 +19,8 @@ namespace Application.UseCases
 
         public Order Execute(string customer, string product, int qty, decimal price)
         {
-            _logger.Log("CreateOrderUseCase starting");
+            _logger.Log("CreateOrder starting");
+
             var order = _orderService.CreateOrder(customer, product, qty, price);
 
             string sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (@Id, @Customer, @Product, @Qty, @Price)";
@@ -39,6 +40,7 @@ namespace Application.UseCases
                 _logger.LogError(ex, "Error al guardar la orden en la base de datos");
                 throw new InvalidOperationException("Error específico al guardar la orden", ex);
             }
+
             return order;
         }
     }
