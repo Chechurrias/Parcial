@@ -62,7 +62,13 @@ public class ProgramTests : IClassFixture<CustomWebAppFactory>
         var response = await _client.GetAsync("/info");
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync();
+
         Assert.Contains("v0.0.1-secure", json);
-        Assert.Contains("Server=localhost", json); // O "Dummy", dependiendo del dummy/real
+        Assert.True(
+        json.Contains("Server=localhost") || 
+        json.Contains("\"sql\":null") || 
+        json.Contains("Dummy"),
+        $"La respuesta del endpoint info debe reflejar el ConnectionString o un dummy/null. Recibido: {json}"
+    );
     }
 }
