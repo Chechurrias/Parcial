@@ -23,8 +23,7 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarCloud Begin
-      # ¡IMPORTANTE! Todo en una sola línea
-      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx" /d:sonar.coverageReportPaths="**/coverage.cobertura.xml"
+      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
       working-directory: ./Parcial
 
     - name: Build Solution
@@ -32,7 +31,14 @@ jobs:
       working-directory: ./Parcial
 
     - name: Run Tests and Collect Coverage
-      run: dotnet test BadCleanArch.sln --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger:trx
+      run: dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults --logger:trx
+      working-directory: ./Parcial
+
+    - name: Copiar cobertura al root del análisis
+      shell: pwsh
+      run: |
+        $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
+        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
       working-directory: ./Parcial
 
     - name: SonarCloud End
