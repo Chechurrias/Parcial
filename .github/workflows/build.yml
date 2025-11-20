@@ -56,6 +56,18 @@ jobs:
         Get-Content ./coverage.cobertura.xml | Select-Object -First 20
         Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
       working-directory: ./Parcial
+      
+    - name: Reemplazar backslashes por slashes
+      shell: pwsh
+      run: |
+        (Get-Content ./coverage.cobertura.xml) -replace '\\', '/' | Set-Content ./coverage.cobertura.xml
+      working-directory: ./Parcial
+
+    - name: Normalizar branch="False" a branch="false"
+      shell: pwsh
+      run: |
+        (Get-Content ./coverage.cobertura.xml) -replace 'branch="False"', 'branch="false"' | Set-Content ./coverage.cobertura.xml
+      working-directory: ./Parcial
 
     - name: SonarCloud End
       shell: pwsh
