@@ -41,13 +41,23 @@ jobs:
         if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
       working-directory: ./Parcial
 
-    - name: Agregar línea DOCTYPE a coverage.cobertura.xml
+    - name: Instalar ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+    - name: Convertir reporte de cobertura a estándar Cobertura
+      run: reportgenerator -reports:coverage.cobertura.xml -targetdir:converted -reporttypes:Cobertura
+      working-directory: ./Parcial
+
+    - name: Usar archivo convertido para SonarCloud
+      shell: pwsh
+      run: Copy-Item ./converted/Cobertura.xml ./coverage.cobertura.xml -Force
+      working-directory: ./Parcial
+
+    - name: Validar y mostrar cobertura generada (opcional)
       shell: pwsh
       run: |
-        $lines = Get-Content ./coverage.cobertura.xml
-        $doctype = '<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">'
-        $lines = $lines[0..0] + $doctype + $lines[1..($lines.Length-1)]
-        Set-Content ./coverage.cobertura.xml -Value $lines
+        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
+        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
       working-directory: ./Parcial
 
     - name: SonarCloud End
