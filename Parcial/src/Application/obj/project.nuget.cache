@@ -1,17 +1,26 @@
 {
   "version": 2,
-  "dgSpecHash": "YKJ8Wvb7i2I=",
-  "success": false,
-  "projectFilePath": "C:\\Users\\leona\\Downloads\\BadCleanArch_compilable\\src\\Application\\Application.csproj",
-  "expectedPackageFiles": [],
+  "dgSpecHash": "Z12vxaAVzHE=",
+  "success": true,
+  "projectFilePath": "/workspaces/Parcial/Parcial/src/Application/Application.csproj",
+  "expectedPackageFiles": [
+    "/home/codespace/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/microsoft.win32.registry/4.7.0/microsoft.win32.registry.4.7.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/runtime.native.system.data.sqlclient.sni/4.7.0/runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/runtime.win-x64.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/system.data.sqlclient/4.8.5/system.data.sqlclient.4.8.5.nupkg.sha512",
+    "/home/codespace/.nuget/packages/system.security.accesscontrol/4.7.0/system.security.accesscontrol.4.7.0.nupkg.sha512",
+    "/home/codespace/.nuget/packages/system.security.principal.windows/4.7.0/system.security.principal.windows.4.7.0.nupkg.sha512"
+  ],
   "logs": [
     {
-      "code": "NU1108",
-      "level": "Error",
-      "message": "Ciclo detectado. \r\n  Application -> WebApi -> Application.",
-      "projectPath": "C:\\Users\\leona\\Downloads\\BadCleanArch_compilable\\src\\Application\\Application.csproj",
-      "filePath": "C:\\Users\\leona\\Downloads\\BadCleanArch_compilable\\src\\Application\\Application.csproj",
-      "libraryId": "Application",
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Data.SqlClient\" 4.8.5 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
+      "libraryId": "System.Data.SqlClient",
       "targetGraphs": [
         "net8.0"
       ]

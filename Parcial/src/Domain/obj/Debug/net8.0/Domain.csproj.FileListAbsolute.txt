@@ -1,0 +1,12 @@
+/workspaces/Parcial/Parcial/src/Domain/bin/Debug/net8.0/Domain.deps.json
+/workspaces/Parcial/Parcial/src/Domain/bin/Debug/net8.0/Domain.dll
+/workspaces/Parcial/Parcial/src/Domain/bin/Debug/net8.0/Domain.pdb
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.csproj.CoreCompileInputs.cache
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.sourcelink.json
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.dll
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/refint/Domain.dll
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/Domain.pdb
+/workspaces/Parcial/Parcial/src/Domain/obj/Debug/net8.0/ref/Domain.dll

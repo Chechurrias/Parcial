@@ -1,21 +1,17 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {
-      "Castle.Core/5.1.1": {
+    "net8.0": {
+      "Castle.Core/5.2.1": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.EventLog": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/Castle.Core.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/Castle.Core.dll": {}
         },
         "runtime": {
-          "lib/net6.0/Castle.Core.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/Castle.Core.dll": {}
         }
       },
       "coverlet.collector/6.0.2": {
@@ -55,6 +51,15 @@
         },
         "buildMultiTargeting": {
           "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/3.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
         }
       },
       "Microsoft.TestPlatform.ObjectModel/17.12.0": {
@@ -306,6 +311,29 @@
           "build/netcoreapp3.1/Microsoft.TestPlatform.TestHost.props": {}
         }
       },
+      "Microsoft.Win32.Registry/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Security.AccessControl": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "Moq/4.20.72": {
         "type": "package",
         "dependencies": {
@@ -331,17 +359,72 @@
           }
         }
       },
+      "runtime.native.System.Data.SqlClient.sni/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+        }
+      },
+      "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          }
+        }
+      },
+      "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x86/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "System.Data.SqlClient/4.8.5": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0",
+          "runtime.native.System.Data.SqlClient.sni": "4.7.0"
+        },
+        "compile": {
+          "ref/netcoreapp2.1/System.Data.SqlClient.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/System.Data.SqlClient.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Diagnostics.EventLog/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/System.Diagnostics.EventLog.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/System.Diagnostics.EventLog.dll": {}
         },
         "runtime": {
-          "lib/net6.0/System.Diagnostics.EventLog.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/System.Diagnostics.EventLog.dll": {}
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -370,48 +453,78 @@
           }
         }
       },
-      "xunit/2.9.2": {
+      "System.Security.AccessControl/4.7.0": {
         "type": "package",
         "dependencies": {
-          "xunit.analyzers": "1.16.0",
-          "xunit.assert": "2.9.2",
-          "xunit.core": "[2.9.2]"
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Security.Principal.Windows/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp3.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "xunit/2.9.3": {
+        "type": "package",
+        "dependencies": {
+          "xunit.analyzers": "1.18.0",
+          "xunit.assert": "2.9.3",
+          "xunit.core": "[2.9.3]"
         }
       },
       "xunit.abstractions/2.0.3": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/xunit.abstractions.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/xunit.abstractions.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/xunit.abstractions.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/xunit.abstractions.dll": {}
         }
       },
-      "xunit.analyzers/1.16.0": {
+      "xunit.analyzers/1.18.0": {
         "type": "package"
       },
-      "xunit.assert/2.9.2": {
+      "xunit.assert/2.9.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/xunit.assert.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/xunit.assert.dll": {}
         },
         "runtime": {
-          "lib/net6.0/xunit.assert.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/xunit.assert.dll": {}
         }
       },
-      "xunit.core/2.9.2": {
+      "xunit.core/2.9.3": {
         "type": "package",
         "dependencies": {
-          "xunit.extensibility.core": "[2.9.2]",
-          "xunit.extensibility.execution": "[2.9.2]"
+          "xunit.extensibility.core": "[2.9.3]",
+          "xunit.extensibility.execution": "[2.9.3]"
         },
         "build": {
           "build/xunit.core.props": {},
@@ -422,36 +535,28 @@
           "buildMultiTargeting/xunit.core.targets": {}
         }
       },
-      "xunit.extensibility.core/2.9.2": {
+      "xunit.extensibility.core/2.9.3": {
         "type": "package",
         "dependencies": {
           "xunit.abstractions": "2.0.3"
         },
         "compile": {
-          "lib/netstandard1.1/xunit.core.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard1.1/xunit.core.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.1/xunit.core.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard1.1/xunit.core.dll": {}
         }
       },
-      "xunit.extensibility.execution/2.9.2": {
+      "xunit.extensibility.execution/2.9.3": {
         "type": "package",
         "dependencies": {
-          "xunit.extensibility.core": "[2.9.2]"
+          "xunit.extensibility.core": "[2.9.3]"
         },
         "compile": {
-          "lib/netstandard1.1/xunit.execution.dotnet.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.1/xunit.execution.dotnet.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {}
         }
       },
       "xunit.runner.visualstudio/2.8.2": {
@@ -465,14 +570,38 @@
         "build": {
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Domain": "1.0.0",
+          "System.Data.SqlClient": "4.8.5"
+        },
+        "compile": {
+          "bin/placeholder/Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Application.dll": {}
+        }
+      },
+      "Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "Castle.Core/5.1.1": {
-      "sha512": "rpYtIczkzGpf+EkZgDr9CClTdemhsrwA/W5hMoPjLkRFnXzH44zDLoovXeKtmxb1ykXK9aJVODSpiJml8CTw2g==",
+    "Castle.Core/5.2.1": {
+      "sha512": "wHARzQA695jwwKreOzNsq54KiGqKP38tv8hi8e2FXDEC/sA6BtrX90tVPDkOfVu13PbEzr00TCV8coikl+D1Iw==",
       "type": "package",
-      "path": "castle.core/5.1.1",
+      "path": "castle.core/5.2.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -480,16 +609,12 @@
         "CHANGELOG.md",
         "LICENSE",
         "castle-logo.png",
-        "castle.core.5.1.1.nupkg.sha512",
+        "castle.core.5.2.1.nupkg.sha512",
         "castle.core.nuspec",
         "lib/net462/Castle.Core.dll",
-        "lib/net462/Castle.Core.xml",
         "lib/net6.0/Castle.Core.dll",
-        "lib/net6.0/Castle.Core.xml",
         "lib/netstandard2.0/Castle.Core.dll",
-        "lib/netstandard2.0/Castle.Core.xml",
         "lib/netstandard2.1/Castle.Core.dll",
-        "lib/netstandard2.1/Castle.Core.xml",
         "readme.txt"
       ]
     },
@@ -649,6 +774,23 @@
         "lib/netcoreapp3.1/_._",
         "microsoft.net.test.sdk.17.12.0.nupkg.sha512",
         "microsoft.net.test.sdk.nuspec"
+      ]
+    },
+    "Microsoft.NETCore.Platforms/3.1.0": {
+      "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "Microsoft.TestPlatform.ObjectModel/17.12.0": {
@@ -819,6 +961,38 @@
         "microsoft.testplatform.testhost.nuspec"
       ]
     },
+    "Microsoft.Win32.Registry/4.7.0": {
+      "sha512": "KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
+      "type": "package",
+      "path": "microsoft.win32.registry/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/Microsoft.Win32.Registry.dll",
+        "lib/net461/Microsoft.Win32.Registry.dll",
+        "lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "microsoft.win32.registry.4.7.0.nupkg.sha512",
+        "microsoft.win32.registry.nuspec",
+        "ref/net46/Microsoft.Win32.Registry.dll",
+        "ref/net461/Microsoft.Win32.Registry.dll",
+        "ref/net472/Microsoft.Win32.Registry.dll",
+        "ref/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "ref/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/net46/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "Moq/4.20.72": {
       "sha512": "EA55cjyNn8eTNWrgrdZJH5QLFp2L43oxl1tlkoYUKIE9pRwL784OWiTXeCV5ApS+AMYEAlt7Fo03A2XfouvHmQ==",
       "type": "package",
@@ -863,6 +1037,127 @@
         "packageIcon.png"
       ]
     },
+    "runtime.native.System.Data.SqlClient.sni/4.7.0": {
+      "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
+      "type": "package",
+      "path": "runtime.native.system.data.sqlclient.sni/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+        "runtime.native.system.data.sqlclient.sni.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "LbrynESTp3bm5O/+jGL8v0Qg5SJlTV08lpIpFesXjF6uGNMWqFnUQbYBJwZTeua6E/Y7FIM1C54Ey1btLWupdg==",
+      "type": "package",
+      "path": "runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-arm64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "38ugOfkYJqJoX9g6EYRlZB5U2ZJH51UP8ptxZgdpS07FgOEToV+lS11ouNK2PM12Pr6X/PpT5jK82G3DwH/SxQ==",
+      "type": "package",
+      "path": "runtime.win-x64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "YhEdSQUsTx+C8m8Bw7ar5/VesXvCFMItyZF7G1AUY+OM0VPZUOeAVpJ4Wl6fydBGUYZxojTDR3I6Bj/+BPkJNA==",
+      "type": "package",
+      "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x86/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Data.SqlClient/4.8.5": {
+      "sha512": "fRqxut4lrndPHrXD+ht1XRmCL3obuKldm4XjCRYS9p5f7FSR7shBxAwTkDrpFMsHC9BhNgjjmUtiIjvehn5zkg==",
+      "type": "package",
+      "path": "system.data.sqlclient/4.8.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net451/System.Data.SqlClient.dll",
+        "lib/net46/System.Data.SqlClient.dll",
+        "lib/net461/System.Data.SqlClient.dll",
+        "lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "lib/netstandard1.2/System.Data.SqlClient.dll",
+        "lib/netstandard1.3/System.Data.SqlClient.dll",
+        "lib/netstandard2.0/System.Data.SqlClient.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net451/System.Data.SqlClient.dll",
+        "ref/net46/System.Data.SqlClient.dll",
+        "ref/net461/System.Data.SqlClient.dll",
+        "ref/netcoreapp2.1/System.Data.SqlClient.dll",
+        "ref/netstandard1.2/System.Data.SqlClient.dll",
+        "ref/netstandard1.3/System.Data.SqlClient.dll",
+        "ref/netstandard2.0/System.Data.SqlClient.dll",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.xml",
+        "runtimes/unix/lib/netstandard1.3/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/net451/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net46/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net461/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net461/System.Data.SqlClient.xml",
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.xml",
+        "runtimes/win/lib/netstandard1.3/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netstandard2.0/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netstandard2.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/uap10.0.16299/System.Data.SqlClient.dll",
+        "runtimes/win/lib/uap10.0.16299/System.Data.SqlClient.xml",
+        "system.data.sqlclient.4.8.5.nupkg.sha512",
+        "system.data.sqlclient.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Diagnostics.EventLog/6.0.0": {
       "sha512": "lcyUiXTsETK2ALsZrX+nWuHSIQeazhqPphLfaRxzdGaG93+0kELqpgEHtwWOlQe7+jSFnKwaCAgL4kjeZCQJnw==",
       "type": "package",
@@ -876,13 +1171,9 @@
         "buildTransitive/netcoreapp2.0/System.Diagnostics.EventLog.targets",
         "buildTransitive/netcoreapp3.1/_._",
         "lib/net461/System.Diagnostics.EventLog.dll",
-        "lib/net461/System.Diagnostics.EventLog.xml",
         "lib/net6.0/System.Diagnostics.EventLog.dll",
-        "lib/net6.0/System.Diagnostics.EventLog.xml",
         "lib/netcoreapp3.1/System.Diagnostics.EventLog.dll",
-        "lib/netcoreapp3.1/System.Diagnostics.EventLog.xml",
         "lib/netstandard2.0/System.Diagnostics.EventLog.dll",
-        "lib/netstandard2.0/System.Diagnostics.EventLog.xml",
         "runtimes/win/lib/net6.0/System.Diagnostics.EventLog.Messages.dll",
         "runtimes/win/lib/net6.0/System.Diagnostics.EventLog.dll",
         "runtimes/win/lib/net6.0/System.Diagnostics.EventLog.xml",
@@ -915,16 +1206,87 @@
         "version.txt"
       ]
     },
-    "xunit/2.9.2": {
-      "sha512": "7LhFS2N9Z6Xgg8aE5lY95cneYivRMfRI8v+4PATa4S64D5Z/Plkg0qa8dTRHSiGRgVZ/CL2gEfJDE5AUhOX+2Q==",
+    "System.Security.AccessControl/4.7.0": {
+      "sha512": "JECvTt5aFF3WT3gHpfofL2MNNP6v84sxtXxpqhLBCcDRzqsPBmHhQ6shv4DwwN2tRlzsUxtb3G9M3763rbXKDg==",
       "type": "package",
-      "path": "xunit/2.9.2",
+      "path": "system.security.accesscontrol/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.dll",
+        "lib/netstandard1.3/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.dll",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.dll",
+        "ref/netstandard1.3/System.Security.AccessControl.dll",
+        "ref/netstandard2.0/System.Security.AccessControl.dll",
+        "ref/uap10.0.16299/_._",
+        "runtimes/win/lib/net46/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.AccessControl.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.accesscontrol.4.7.0.nupkg.sha512",
+        "system.security.accesscontrol.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Security.Principal.Windows/4.7.0": {
+      "sha512": "ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
+      "type": "package",
+      "path": "system.security.principal.windows/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.dll",
+        "lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.dll",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.dll",
+        "ref/netcoreapp3.0/System.Security.Principal.Windows.dll",
+        "ref/netstandard1.3/System.Security.Principal.Windows.dll",
+        "ref/netstandard2.0/System.Security.Principal.Windows.dll",
+        "ref/uap10.0.16299/_._",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/net46/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.principal.windows.4.7.0.nupkg.sha512",
+        "system.security.principal.windows.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "xunit/2.9.3": {
+      "sha512": "TlXQBinK35LpOPKHAqbLY4xlEen9TBafjs0V5KnA4wZsoQLQJiirCR4CbIXvOH8NzkW4YeJKP5P/Bnrodm0h9Q==",
+      "type": "package",
+      "path": "xunit/2.9.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "_content/README.md",
         "_content/logo-128-transparent.png",
-        "xunit.2.9.2.nupkg.sha512",
+        "xunit.2.9.3.nupkg.sha512",
         "xunit.nuspec"
       ]
     },
@@ -936,19 +1298,16 @@
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net35/xunit.abstractions.dll",
-        "lib/net35/xunit.abstractions.xml",
         "lib/netstandard1.0/xunit.abstractions.dll",
-        "lib/netstandard1.0/xunit.abstractions.xml",
         "lib/netstandard2.0/xunit.abstractions.dll",
-        "lib/netstandard2.0/xunit.abstractions.xml",
         "xunit.abstractions.2.0.3.nupkg.sha512",
         "xunit.abstractions.nuspec"
       ]
     },
-    "xunit.analyzers/1.16.0": {
-      "sha512": "hptYM7vGr46GUIgZt21YHO4rfuBAQS2eINbFo16CV/Dqq+24Tp+P5gDCACu1AbFfW4Sp/WRfDPSK8fmUUb8s0Q==",
+    "xunit.analyzers/1.18.0": {
+      "sha512": "OtFMHN8yqIcYP9wcVIgJrq01AfTxijjAqVDy/WeQVSyrDC1RzBWeQPztL49DN2syXRah8TYnfvk035s7L95EZQ==",
       "type": "package",
-      "path": "xunit.analyzers/1.16.0",
+      "path": "xunit.analyzers/1.18.0",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -959,31 +1318,29 @@
         "analyzers/dotnet/cs/xunit.analyzers.fixes.dll",
         "tools/install.ps1",
         "tools/uninstall.ps1",
-        "xunit.analyzers.1.16.0.nupkg.sha512",
+        "xunit.analyzers.1.18.0.nupkg.sha512",
         "xunit.analyzers.nuspec"
       ]
     },
-    "xunit.assert/2.9.2": {
-      "sha512": "QkNBAQG4pa66cholm28AxijBjrmki98/vsEh4Sx5iplzotvPgpiotcxqJQMRC8d7RV7nIT8ozh97957hDnZwsQ==",
+    "xunit.assert/2.9.3": {
+      "sha512": "/Kq28fCE7MjOV42YLVRAJzRF0WmEqsmflm0cfpMjGtzQ2lR5mYVj1/i0Y8uDAOLczkL3/jArrwehfMD0YogMAA==",
       "type": "package",
-      "path": "xunit.assert/2.9.2",
+      "path": "xunit.assert/2.9.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "_content/README.md",
         "_content/logo-128-transparent.png",
         "lib/net6.0/xunit.assert.dll",
-        "lib/net6.0/xunit.assert.xml",
         "lib/netstandard1.1/xunit.assert.dll",
-        "lib/netstandard1.1/xunit.assert.xml",
-        "xunit.assert.2.9.2.nupkg.sha512",
+        "xunit.assert.2.9.3.nupkg.sha512",
         "xunit.assert.nuspec"
       ]
     },
-    "xunit.core/2.9.2": {
-      "sha512": "O6RrNSdmZ0xgEn5kT927PNwog5vxTtKrWMihhhrT0Sg9jQ7iBDciYOwzBgP2krBEk5/GBXI18R1lKvmnxGcb4w==",
+    "xunit.core/2.9.3": {
+      "sha512": "BiAEvqGvyme19wE0wTKdADH+NloYqikiU0mcnmiNyXaF9HyHmE6sr/3DC5vnBkgsWaE6yPyWszKSPSApWdRVeQ==",
       "type": "package",
-      "path": "xunit.core/2.9.2",
+      "path": "xunit.core/2.9.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -993,14 +1350,14 @@
         "build/xunit.core.targets",
         "buildMultiTargeting/xunit.core.props",
         "buildMultiTargeting/xunit.core.targets",
-        "xunit.core.2.9.2.nupkg.sha512",
+        "xunit.core.2.9.3.nupkg.sha512",
         "xunit.core.nuspec"
       ]
     },
-    "xunit.extensibility.core/2.9.2": {
-      "sha512": "Ol+KlBJz1x8BrdnhN2DeOuLrr1I/cTwtHCggL9BvYqFuVd/TUSzxNT5O0NxCIXth30bsKxgMfdqLTcORtM52yQ==",
+    "xunit.extensibility.core/2.9.3": {
+      "sha512": "kf3si0YTn2a8J8eZNb+zFpwfoyvIrQ7ivNk5ZYA5yuYk1bEtMe4DxJ2CF/qsRgmEnDr7MnW1mxylBaHTZ4qErA==",
       "type": "package",
-      "path": "xunit.extensibility.core/2.9.2",
+      "path": "xunit.extensibility.core/2.9.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1008,29 +1365,25 @@
         "_content/logo-128-transparent.png",
         "lib/net452/xunit.core.dll",
         "lib/net452/xunit.core.dll.tdnet",
-        "lib/net452/xunit.core.xml",
         "lib/net452/xunit.runner.tdnet.dll",
         "lib/net452/xunit.runner.utility.net452.dll",
         "lib/netstandard1.1/xunit.core.dll",
-        "lib/netstandard1.1/xunit.core.xml",
-        "xunit.extensibility.core.2.9.2.nupkg.sha512",
+        "xunit.extensibility.core.2.9.3.nupkg.sha512",
         "xunit.extensibility.core.nuspec"
       ]
     },
-    "xunit.extensibility.execution/2.9.2": {
-      "sha512": "rKMpq4GsIUIJibXuZoZ8lYp5EpROlnYaRpwu9Zr0sRZXE7JqJfEEbCsUriZqB+ByXCLFBJyjkTRULMdC+U566g==",
+    "xunit.extensibility.execution/2.9.3": {
+      "sha512": "yMb6vMESlSrE3Wfj7V6cjQ3S4TXdXpRqYeNEI3zsX31uTsGMJjEw6oD5F5u1cHnMptjhEECnmZSsPxB6ChZHDQ==",
       "type": "package",
-      "path": "xunit.extensibility.execution/2.9.2",
+      "path": "xunit.extensibility.execution/2.9.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "_content/README.md",
         "_content/logo-128-transparent.png",
         "lib/net452/xunit.execution.desktop.dll",
-        "lib/net452/xunit.execution.desktop.xml",
         "lib/netstandard1.1/xunit.execution.dotnet.dll",
-        "lib/netstandard1.1/xunit.execution.dotnet.xml",
-        "xunit.extensibility.execution.2.9.2.nupkg.sha512",
+        "xunit.extensibility.execution.2.9.3.nupkg.sha512",
         "xunit.extensibility.execution.nuspec"
       ]
     },
@@ -1058,49 +1411,62 @@
         "xunit.runner.visualstudio.2.8.2.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "Application/1.0.0": {
+      "type": "project",
+      "path": "../../Application/Application.csproj",
+      "msbuildProject": "../../Application/Application.csproj"
+    },
+    "Domain/1.0.0": {
+      "type": "project",
+      "path": "../../Domain/Domain.csproj",
+      "msbuildProject": "../../Domain/Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
-    "net9.0": [
+    "net8.0": [
+      "Application >= 1.0.0",
+      "Castle.Core >= 5.1.2",
+      "Domain >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.12.0",
       "Moq >= 4.20.72",
       "coverlet.collector >= 6.0.2",
-      "xunit >= 2.9.2",
+      "xunit >= 2.9.3",
       "xunit.runner.visualstudio >= 2.8.2"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/codespace/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\Universidad\\Metricas de Calidad de Software\\Parcial\\Parcial\\src\\Test\\Application.Test\\src\\Tests\\Application.Tests\\Application.Tests.csproj",
+      "projectUniqueName": "/workspaces/Parcial/Parcial/src/Tests/Application.Tests/Application.Tests.csproj",
       "projectName": "Application.Tests",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\Universidad\\Metricas de Calidad de Software\\Parcial\\Parcial\\src\\Test\\Application.Test\\src\\Tests\\Application.Tests\\Application.Tests.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\Universidad\\Metricas de Calidad de Software\\Parcial\\Parcial\\src\\Test\\Application.Test\\src\\Tests\\Application.Tests\\obj\\",
+      "projectPath": "/workspaces/Parcial/Parcial/src/Tests/Application.Tests/Application.Tests.csproj",
+      "packagesPath": "/home/codespace/.nuget/packages/",
+      "outputPath": "/workspaces/Parcial/Parcial/src/Tests/Application.Tests/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/codespace/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net9.0"
+        "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
-          "projectReferences": {}
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "/workspaces/Parcial/Parcial/src/Application/Application.csproj": {
+              "projectPath": "/workspaces/Parcial/Parcial/src/Application/Application.csproj"
+            },
+            "/workspaces/Parcial/Parcial/src/Domain/Domain.csproj": {
+              "projectPath": "/workspaces/Parcial/Parcial/src/Domain/Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -1112,13 +1478,16 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.300"
+      }
     },
     "frameworks": {
-      "net9.0": {
-        "targetAlias": "net9.0",
+      "net8.0": {
+        "targetAlias": "net8.0",
         "dependencies": {
+          "Castle.Core": {
+            "target": "Package",
+            "version": "[5.1.2, )"
+          },
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
             "version": "[17.12.0, )"
@@ -1133,7 +1502,7 @@
           },
           "xunit": {
             "target": "Package",
-            "version": "[2.9.2, )"
+            "version": "[2.9.3, )"
           },
           "xunit.runner.visualstudio": {
             "target": "Package",
@@ -1156,8 +1525,20 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.415/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Application.Tests depends on Castle.Core (>= 5.1.2) but Castle.Core 5.1.2 was not found. An approximate best match of Castle.Core 5.2.1 was resolved.",
+      "libraryId": "Castle.Core",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

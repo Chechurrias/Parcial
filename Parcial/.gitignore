@@ -1,0 +1,29 @@
+# See https://aka.ms/gitignore for more about ignoring files.
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]in/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto generated files
+.vscode/
+.vs/
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of PackageReference items
+**/packages/*
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
