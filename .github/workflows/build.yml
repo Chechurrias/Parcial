@@ -31,7 +31,10 @@ jobs:
     - name: Build Solution
       run: dotnet build BadCleanArch.sln --configuration Release
       working-directory: ./Parcial
-
+    
+    - name: Preparar variables de entorno necesarias para integración
+      run: echo "DB_PASSWORD=testpwd123" >> $GITHUB_ENV
+   
     - name: Run Tests and Collect OpenCover Coverage
       run: |
         dotnet test src/Tests/Application.Tests/Application.Tests.csproj --collect:"XPlat Code Coverage" --results-directory src/Tests/Application.Tests/TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover --logger:trx
