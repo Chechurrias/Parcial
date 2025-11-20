@@ -62,8 +62,8 @@ app.MapGet("/info", (IDatabase db) => new
 
 await app.RunAsync();
 
-public partial class Program { }
-
-
-
-
+public partial class Program
+{
+    // Constructor protegido para cumplir con la recomendación del analizador
+    protected Program() { }
+}
