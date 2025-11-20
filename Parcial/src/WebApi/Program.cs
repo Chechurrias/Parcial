@@ -62,7 +62,8 @@ app.MapGet("/info", (IDatabase db) => new
 
 await app.RunAsync();
 
-public static partial class Program { }
+public partial class Program { }
+
 
 
 
