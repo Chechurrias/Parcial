@@ -7,6 +7,7 @@ namespace Application.Tests
         public int ExecuteNonQuery(string sql, object parameters) => 1;
 
         // Mantener no estática para cumplir interfaz
-        public string ConnectionString => "Dummy";
+        public static string ConnectionString => "Dummy";
+
     }
 }
