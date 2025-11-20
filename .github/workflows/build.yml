@@ -22,8 +22,10 @@ jobs:
     - name: Install SonarScanner
       run: dotnet tool install --global dotnet-sonarscanner
 
-    - name: SonarCloud Begin
-      run: dotnet sonarscanner begin /k:"Chechurrias_Parcial" /o:"chechurrias" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
+    - name: SonarCloud Begin  
+      shell: pwsh
+      run: |
+        dotnet sonarscanner begin /k=Chechurrias_Parcial /o=chechurrias /d:sonar.token=${{ secrets.SONAR_TOKEN }} /d:sonar.coverageReportPaths=coverage.cobertura.xml
       working-directory: ./Parcial
 
     - name: Build Solution
@@ -38,13 +40,13 @@ jobs:
       shell: pwsh
       run: |
         $file = Get-ChildItem -Path src/Tests/Application.Tests/TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
-        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml }
+        if ($file) { Copy-Item $file.FullName ./coverage.cobertura.xml -Force }
       working-directory: ./Parcial
 
     - name: Instalar ReportGenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-    - name: Convertir reporte de cobertura a estándar Cobertura
+    - name: Convertir cobertura a estándar Cobertura
       run: reportgenerator -reports:coverage.cobertura.xml -targetdir:converted -reporttypes:Cobertura
       working-directory: ./Parcial
 
@@ -53,13 +55,19 @@ jobs:
       run: Copy-Item ./converted/Cobertura.xml ./coverage.cobertura.xml -Force
       working-directory: ./Parcial
 
-    - name: Validar y mostrar cobertura generada (opcional)
+    - name: Verificar archivo de cobertura antes de SonarCloud End
       shell: pwsh
       run: |
-        Get-Content ./coverage.cobertura.xml | Select-Object -First 20
-        Write-Host "Tamaño archivo:" (Get-Item ./coverage.cobertura.xml).Length
+        if (Test-Path ./coverage.cobertura.xml) {
+          Write-Host "Archivo coverage.cobertura.xml EXISTE y su tamaño es:" (Get-Item ./coverage.cobertura.xml).Length
+          Get-Content ./coverage.cobertura.xml | Select-Object -First 20
+        } else {
+          Write-Host "ERROR: Archivo coverage.cobertura.xml NO EXISTE"
+          exit 1
+        }
       working-directory: ./Parcial
 
     - name: SonarCloud End
-      run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      shell: pwsh
+      run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
       working-directory: ./Parcial
