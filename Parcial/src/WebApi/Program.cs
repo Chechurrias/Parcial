@@ -1,8 +1,8 @@
 using Infrastructure.Data;
 using Infrastructure.Logging;
-using System;
-using System.IO;
-using System.Security.Cryptography;
+using Application;
+using Application.Interfaces;
+using Application.UseCases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,52 +25,43 @@ builder.Services.AddCors(options =>
     });
 });
 
-var password = Environment.GetEnvironmentVariable("DB_PASSWORD")
-    ?? throw new InvalidOperationException("DB_PASSWORD environment variable not set");
-
-BadDb.ConnectionString = string.Format(
-    "Server=database-server;User Id=user;Password={0};Database=ProductionData;TrustServerCertificate=True",
-    password
-);
+// Inyección de dependencias
+builder.Services.AddScoped<ILogger, Logger>();
+builder.Services.AddScoped<IDatabase, BadDb>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<CreateOrder>();
 
 var app = builder.Build();
 
 app.UseCors("TrustedOrigins");
 
+// Logging global
 app.Use(async (context, next) =>
 {
+    var logger = context.RequestServices.GetRequiredService<ILogger>();
     try
     {
         await next();
     }
     catch (Exception ex)
     {
-        Logger.LogError($"Error global: {ex.Message}");
+        logger.LogError(ex, "Error global");
         context.Response.StatusCode = 500;
         await context.Response.WriteAsync("Internal server error");
     }
 });
 
-app.MapGet("/health", () =>
+app.MapGet("/health", (ILogger logger) =>
 {
-    Logger.Log("Health check started");
-
-    byte[] data = new byte[4];
-    RandomNumberGenerator.Create().GetBytes(data);
-    int randomValue = BitConverter.ToInt32(data, 0);
-
-    if (randomValue % 13 == 0)
-    {
-        throw new InvalidOperationException("Random failure occurred.");
-    }
-    return $"ok {randomValue}";
+    logger.Log("Health check started");
+    return $"ok {DateTime.Now.Ticks}";
 });
 
-app.MapPost("/orders", async (HttpContext http) =>
+// Endpoint de creación de orden usando DI
+app.MapPost("/orders", async (HttpContext http, CreateOrder useCase) =>
 {
     using var reader = new StreamReader(http.Request.Body);
     var body = await reader.ReadToEndAsync();
-
     var parts = (body ?? "").Split(',');
 
     var customer = parts.Length > 0 ? parts[0] : "anon";
@@ -78,17 +69,13 @@ app.MapPost("/orders", async (HttpContext http) =>
     var qty = parts.Length > 2 && int.TryParse(parts[2], out var q) ? q : 1;
     var price = parts.Length > 3 && decimal.TryParse(parts[3], out var p) ? p : 0.99m;
 
-    var uc = new CreateOrderUseCase(new OrderService(), new BadDb(), new Logger());
-    var order = uc.Execute(customer, product, qty, price);
-
+    var order = useCase.Execute(customer, product, qty, price);
     return Results.Ok(order);
 });
 
-app.MapGet("/orders/last", () => Domain.Services.OrderService.LastOrders);
-
-app.MapGet("/info", (IConfiguration cfg) => new
+app.MapGet("/info", (IDatabase db) => new
 {
-    sql = BadDb.ConnectionString,
+    sql = (db as BadDb)?.ConnectionString,
     env = Environment.GetEnvironmentVariables(),
     version = "v0.0.1-secure"
 });
