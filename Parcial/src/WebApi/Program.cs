@@ -1,44 +1,25 @@
+using AppLogger = Application.Interfaces.ILogger;
 using Infrastructure.Data;
 using Infrastructure.Logging;
 using Application;
 using Application.Interfaces;
 using Application.UseCases;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-var allowedOrigins = new[] { "https://midominio.com", "https://app.otraempresa.com" };
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("TrustedOrigins", policy =>
-    {
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
-// Inyección de dependencias
-builder.Services.AddScoped<ILogger, Logger>();
+builder.Services.AddScoped<AppLogger, Logger>();
 builder.Services.AddScoped<IDatabase, BadDb>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<CreateOrder>();
 
 var app = builder.Build();
 
-app.UseCors("TrustedOrigins");
-
-// Logging global
 app.Use(async (context, next) =>
 {
-    var logger = context.RequestServices.GetRequiredService<ILogger>();
+    var logger = context.RequestServices.GetRequiredService<AppLogger>();
     try
     {
         await next();
@@ -51,12 +32,11 @@ app.Use(async (context, next) =>
     }
 });
 
-app.MapGet("/health", (ILogger logger) =>
+app.MapGet("/health", (AppLogger logger) =>
 {
     logger.Log("Health check started");
     return $"ok {DateTime.Now.Ticks}";
 });
-
 // Endpoint de creación de orden usando DI
 app.MapPost("/orders", async (HttpContext http, CreateOrder useCase) =>
 {
@@ -81,3 +61,4 @@ app.MapGet("/info", (IDatabase db) => new
 });
 
 await app.RunAsync();
+
