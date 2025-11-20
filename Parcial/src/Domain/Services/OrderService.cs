@@ -1,39 +1,38 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-
-namespace Domain.Services;
-
 using Domain.Entities;
 
-public static class OrderService
+namespace Domain.Services
 {
-    private static readonly ConcurrentBag<Order> LastOrdersBag = new ConcurrentBag<Order>();
-    public static IReadOnlyCollection<Order> LastOrders => LastOrdersBag;
-
-    public static Order CreateOrder(string customer, string product, int qty, decimal price)
+    public static class OrderService
     {
-        if (string.IsNullOrWhiteSpace(customer))
-            throw new ArgumentException("Customer no puede estar vacío", nameof(customer));
-        if (string.IsNullOrWhiteSpace(product))
-            throw new ArgumentException("Product no puede estar vacío", nameof(product));
-        if (qty <= 0)
-            throw new ArgumentOutOfRangeException(nameof(qty), "Cantidad debe ser mayor que cero");
-        if (price < 0)
-            throw new ArgumentOutOfRangeException(nameof(price), "Precio no puede ser negativo");
+        private static readonly ConcurrentBag<Order> LastOrdersBag = new ConcurrentBag<Order>();
+        public static IReadOnlyCollection<Order> LastOrders => LastOrdersBag;
 
-        var o = new Order
+        public static Order CreateOrder(string customer, string product, int qty, decimal price)
         {
-            // Ajusta según tipo definido en Order.cs:
-            // Id = nuevoIdEntero,
-            CustomerName = customer,
-            ProductName = product,
-            Quantity = qty,
-            UnitPrice = price
-        };
+            if (string.IsNullOrWhiteSpace(customer))
+                throw new ArgumentException("Customer no puede estar vacío", nameof(customer));
+            if (string.IsNullOrWhiteSpace(product))
+                throw new ArgumentException("Product no puede estar vacío", nameof(product));
+            if (qty <= 0)
+                throw new ArgumentOutOfRangeException(nameof(qty), "Cantidad debe ser mayor que cero");
+            if (price < 0)
+                throw new ArgumentOutOfRangeException(nameof(price), "Precio no puede ser negativo");
 
-        LastOrdersBag.Add(o);
+            var o = new Order
+            {
+                CustomerName = customer,
+                ProductName = product,
+                Quantity = qty,
+                UnitPrice = price
+            };
 
-        return o;
+            LastOrdersBag.Add(o);
+
+            return o;
+        }
     }
 }
+
