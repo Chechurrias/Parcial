@@ -30,7 +30,6 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>
 public class ProgramTests : IClassFixture<CustomWebAppFactory>
 {
     private readonly HttpClient _client;
-
     public ProgramTests(CustomWebAppFactory factory)
     {
         _client = factory.CreateClient();
