@@ -1,5 +1,3 @@
-using Application.Interfaces;
-
 namespace Application.Tests
 {
     public class DummyDatabase : IDatabase
