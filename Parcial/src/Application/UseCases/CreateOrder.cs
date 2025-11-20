@@ -1,6 +1,6 @@
 using System;
 using Domain.Entities;
-using Application.Interfaces; // <- aquí defines tus interfaces
+using Application.Interfaces; // SOLO este using de interfaces
 
 namespace Application.UseCases
 {
@@ -23,7 +23,6 @@ namespace Application.UseCases
             var order = _orderService.CreateOrder(customer, product, qty, price);
 
             string sql = "INSERT INTO Orders(Id, Customer, Product, Qty, Price) VALUES (@Id, @Customer, @Product, @Qty, @Price)";
-
             try
             {
                 _database.ExecuteNonQuery(sql, new
@@ -44,4 +43,3 @@ namespace Application.UseCases
         }
     }
 }
-
