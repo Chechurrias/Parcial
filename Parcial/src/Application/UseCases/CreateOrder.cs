@@ -1,6 +1,6 @@
 using System;
 using Domain.Entities;
-using Application.Interfaces; // Este using es clave
+using Application.Interfaces;
 
 namespace Application.UseCases
 {
