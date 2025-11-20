@@ -20,15 +20,14 @@ namespace Infrastructure.Data
         {
             if (parameters is not SqlParameter[] sqlParams)
                 throw new ArgumentException("parameters deben ser SqlParameter[]", nameof(parameters));
+
             using var conn = new SqlConnection(_connectionString);
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddRange(sqlParams);
             conn.Open();
-            return cmd.ExecuteNonQuery(); // <-- devuelve int
+            return cmd.ExecuteNonQuery();
         }
-     
 
         public string ConnectionString => _connectionString;
     }
 }
-
